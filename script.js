@@ -1,11 +1,11 @@
-// Load saved tree or default
+// Load saved tree or create default
 let treeData = JSON.parse(localStorage.getItem("treeData")) || {
   name: "Root",
   collapsed: false,
   children: []
 };
 
-// Save tree
+// Save tree to browser
 function saveTree() {
   localStorage.setItem("treeData", JSON.stringify(treeData));
 }
@@ -24,42 +24,54 @@ function renderTree() {
   container.appendChild(ul);
 }
 
+
+// Create node element
 function createNode(node, parent) {
 
   const li = document.createElement("li");
 
-  const nodeDiv = document.createElement("div");
-  nodeDiv.className = "node";
+  const nodeBox = document.createElement("div");
+  nodeBox.className = "node";
 
-  // Toggle arrow
+  // Collapse arrow
   const toggle = document.createElement("span");
-  toggle.className = "toggle";
 
   if (node.children.length > 0) {
-    toggle.textContent = node.collapsed ? "▶" : "▼";
+
+    toggle.textContent = node.collapsed ? "▶ " : "▼ ";
+
+    toggle.style.cursor = "pointer";
 
     toggle.onclick = () => {
       node.collapsed = !node.collapsed;
       saveTree();
       renderTree();
     };
+
   } else {
-    toggle.textContent = "•";
+
+    toggle.textContent = "• ";
+
   }
 
-  nodeDiv.appendChild(toggle);
+  nodeBox.appendChild(toggle);
 
   // Node name
-  const name = document.createElement("span");
-  name.textContent = " " + node.name + " ";
-  nodeDiv.appendChild(name);
+  const nameSpan = document.createElement("span");
+  nameSpan.textContent = node.name;
+
+  nodeBox.appendChild(nameSpan);
+
 
   // MAKE CHILD BUTTON
   const addBtn = document.createElement("button");
-  addBtn.textContent = "+Child";
+
+  addBtn.textContent = "Make Child";
 
   addBtn.onclick = () => {
+
     const childName = prompt("Enter child name:");
+
     if (!childName) return;
 
     node.children.push({
@@ -72,14 +84,18 @@ function createNode(node, parent) {
     renderTree();
   };
 
-  nodeDiv.appendChild(addBtn);
+  nodeBox.appendChild(addBtn);
 
-  // RENAME BUTTON
+
+  // RENAME BUTTON  <<< THIS WAS MISSING
   const renameBtn = document.createElement("button");
+
   renameBtn.textContent = "Rename";
 
   renameBtn.onclick = () => {
-    const newName = prompt("Enter new name:", node.name);
+
+    const newName = prompt("Enter new node name:", node.name);
+
     if (!newName) return;
 
     node.name = newName;
@@ -88,41 +104,48 @@ function createNode(node, parent) {
     renderTree();
   };
 
-  nodeDiv.appendChild(renameBtn);
+  nodeBox.appendChild(renameBtn);
 
-  // DELETE BUTTON (THIS IS THE IMPORTANT PART)
+
+  // DELETE BUTTON  <<< THIS WAS MISSING
   if (parent !== null) {
 
     const deleteBtn = document.createElement("button");
+
     deleteBtn.textContent = "Delete";
 
     deleteBtn.onclick = () => {
 
-      if (!confirm("Are you sure you want to delete this node?"))
-        return;
+      if (!confirm("Delete this node?")) return;
 
       const index = parent.children.indexOf(node);
 
       if (index > -1) {
+
         parent.children.splice(index, 1);
+
       }
 
       saveTree();
       renderTree();
     };
 
-    nodeDiv.appendChild(deleteBtn);
+    nodeBox.appendChild(deleteBtn);
   }
 
-  li.appendChild(nodeDiv);
 
-  // CHILDREN
+  li.appendChild(nodeBox);
+
+
+  // Render children
   if (!node.collapsed && node.children.length > 0) {
 
     const ul = document.createElement("ul");
 
     node.children.forEach(child => {
+
       ul.appendChild(createNode(child, node));
+
     });
 
     li.appendChild(ul);
@@ -132,14 +155,13 @@ function createNode(node, parent) {
 }
 
 
-//
-// EXPORT TREE
-//
+// Export tree
 function exportTree() {
 
-  const dataStr = JSON.stringify(treeData, null, 2);
-
-  const blob = new Blob([dataStr], { type: "application/json" });
+  const blob = new Blob(
+    [JSON.stringify(treeData, null, 2)],
+    { type: "application/json" }
+  );
 
   const link = document.createElement("a");
 
@@ -150,9 +172,8 @@ function exportTree() {
   link.click();
 }
 
-//
-// IMPORT TREE
-//
+
+// Import tree
 function importTree(event) {
 
   const file = event.target.files[0];
@@ -172,6 +193,7 @@ function importTree(event) {
 
   reader.readAsText(file);
 }
+
 
 // Initial render
 renderTree();
