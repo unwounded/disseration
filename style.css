@@ -4,22 +4,58 @@ body {
   padding: 20px;
 }
 
-ul {
-  list-style-type: none;
+.toolbar {
+  margin-bottom: 15px;
 }
 
-li {
-  margin: 5px;
-  padding: 5px;
+ul.tree,
+ul.tree ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+ul.tree ul::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10px;
+  border-left: 2px solid #ccc;
+  height: 100%;
+}
+
+ul.tree li {
+  margin: 5px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+ul.tree li::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 0;
+  width: 10px;
+  border-top: 2px solid #ccc;
+}
+
+.node {
+  display: inline-block;
   background: white;
+  padding: 5px;
   border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.node button {
+  margin-left: 5px;
+  font-size: 11px;
+}
+
+.toggle {
   cursor: pointer;
-}
-
-li:hover {
-  background: #e3f2fd;
-}
-
-.controls {
-  margin-top: 20px;
+  font-weight: bold;
+  margin-right: 5px;
+  color: blue;
 }
