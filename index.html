@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hierarchy Tree</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Hierarchy Tree</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h1>Interactive Hierarchy Tree</h1>
 
-<div id="tree"></div>
-
-<div class="controls">
-  <input type="text" id="nodeName" placeholder="Enter node name">
-  <button onclick="addNode()">Add Node</button>
+<div class="toolbar">
+  <button onclick="exportTree()">Export Tree</button>
+  <input type="file" id="importFile" onchange="importTree(event)">
 </div>
+
+<div id="tree"></div>
 
 <script src="script.js"></script>
 
 </body>
 </html>
-
