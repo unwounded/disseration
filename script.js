@@ -24,7 +24,6 @@ function renderTree() {
   container.appendChild(ul);
 }
 
-// Create node
 function createNode(node, parent) {
 
   const li = document.createElement("li");
@@ -32,7 +31,7 @@ function createNode(node, parent) {
   const nodeDiv = document.createElement("div");
   nodeDiv.className = "node";
 
-  // Collapse toggle
+  // Toggle arrow
   const toggle = document.createElement("span");
   toggle.className = "toggle";
 
@@ -50,19 +49,17 @@ function createNode(node, parent) {
 
   nodeDiv.appendChild(toggle);
 
-  // Name
+  // Node name
   const name = document.createElement("span");
-  name.textContent = node.name;
+  name.textContent = " " + node.name + " ";
   nodeDiv.appendChild(name);
 
-  // Make Child button
+  // MAKE CHILD BUTTON
   const addBtn = document.createElement("button");
   addBtn.textContent = "+Child";
 
   addBtn.onclick = () => {
-
-    const childName = prompt("Child name:");
-
+    const childName = prompt("Enter child name:");
     if (!childName) return;
 
     node.children.push({
@@ -77,14 +74,12 @@ function createNode(node, parent) {
 
   nodeDiv.appendChild(addBtn);
 
-  // Rename button
+  // RENAME BUTTON
   const renameBtn = document.createElement("button");
   renameBtn.textContent = "Rename";
 
   renameBtn.onclick = () => {
-
-    const newName = prompt("New name:", node.name);
-
+    const newName = prompt("Enter new name:", node.name);
     if (!newName) return;
 
     node.name = newName;
@@ -95,7 +90,7 @@ function createNode(node, parent) {
 
   nodeDiv.appendChild(renameBtn);
 
-  // Delete button
+  // DELETE BUTTON (THIS IS THE IMPORTANT PART)
   if (parent !== null) {
 
     const deleteBtn = document.createElement("button");
@@ -103,11 +98,14 @@ function createNode(node, parent) {
 
     deleteBtn.onclick = () => {
 
-      if (!confirm("Delete node?")) return;
+      if (!confirm("Are you sure you want to delete this node?"))
+        return;
 
       const index = parent.children.indexOf(node);
 
-      parent.children.splice(index, 1);
+      if (index > -1) {
+        parent.children.splice(index, 1);
+      }
 
       saveTree();
       renderTree();
@@ -118,7 +116,7 @@ function createNode(node, parent) {
 
   li.appendChild(nodeDiv);
 
-  // Children
+  // CHILDREN
   if (!node.collapsed && node.children.length > 0) {
 
     const ul = document.createElement("ul");
@@ -132,6 +130,7 @@ function createNode(node, parent) {
 
   return li;
 }
+
 
 //
 // EXPORT TREE
