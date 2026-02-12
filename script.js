@@ -191,7 +191,7 @@ function createNode(node, parent) {
   }
 
 
-  // Children
+  // collapse all children nodes.
   if (!node.collapsed && node.children.length > 0) {
 
     const ul = document.createElement("ul");
@@ -209,7 +209,7 @@ function createNode(node, parent) {
 }
 
 
-// Export tree
+// Export tree function
 function exportTree() {
 
   const blob = new Blob(
@@ -227,7 +227,7 @@ function exportTree() {
 }
 
 
-// Import tree
+// Import tree function
 function importTree(event) {
 
   const file = event.target.files[0];
